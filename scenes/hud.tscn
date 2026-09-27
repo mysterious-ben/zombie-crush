@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://d0uv2lqe72dah"]
+
+[ext_resource type="Script" uid="uid://bercjjgx73ykj" path="res://scripts/hud.gd" id="1_hud"]
+[ext_resource type="FontFile" uid="uid://bpbfok5c40t85" path="res://assets/fonts/PressStart2P-Regular.ttf" id="2_font"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_kills"]
+font = ExtResource("2_font")
+font_size = 8
+font_color = Color(1, 0, 0, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="HUD" type="CanvasLayer" unique_id=781947985]
+script = ExtResource("1_hud")
+
+[node name="GameOverOverlay" type="ColorRect" parent="." unique_id=753949245]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0, 0, 0.35)
+
+[node name="KillCount" type="Label" parent="." unique_id=1098392117]
+offset_left = 4.0
+offset_top = 2.0
+text = "0"
+label_settings = SubResource("LabelSettings_kills")
