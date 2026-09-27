@@ -59,6 +59,12 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_stay_on_screen()
 
+	# move_and_slide records everything we bumped into this step
+	for i in get_slide_collision_count():
+		var collider: Node = get_slide_collision(i).get_collider()
+		if collider is Civilian:
+			collider.scream()
+
 	shoot_cooldown_left -= delta
 	if Input.is_action_just_pressed(action_prefix + "shoot") and shoot_cooldown_left <= 0:
 		_shoot()

@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://qeq6uxabxfsq" path="res://assets/handmade/npc.png" id="1_5iqb5"]
 [ext_resource type="Script" uid="uid://daalpphy31c54" path="res://scripts/civilian.gd" id="1_jrwjn"]
+[ext_resource type="FontFile" uid="uid://bpbfok5c40t85" path="res://assets/fonts/PressStart2P-Regular.ttf" id="3_font"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5iqb5"]
 atlas = ExtResource("1_5iqb5")
@@ -54,6 +55,13 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_5iqb5"]
 radius = 4.0
 
+[sub_resource type="LabelSettings" id="LabelSettings_speech"]
+font = ExtResource("3_font")
+font_size = 8
+font_color = Color(1, 0, 0, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
 [node name="Civilian" type="CharacterBody2D" unique_id=325636589]
 script = ExtResource("1_jrwjn")
 
@@ -65,3 +73,13 @@ autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1486393236]
 shape = SubResource("CircleShape2D_5iqb5")
+
+[node name="Speech" type="Label" parent="." unique_id=1296650341]
+visible = false
+top_level = true
+z_index = 10
+offset_right = 160.0
+offset_bottom = 20.0
+label_settings = SubResource("LabelSettings_speech")
+horizontal_alignment = 1
+vertical_alignment = 2

@@ -1,4 +1,5 @@
-# The root of the level: spawns zombies and player 2, counts kills, restarts on game over
+# The root of the level: starts the zombies when the civilian is alarmed or shot,
+# spawns zombies and player 2, counts kills, restarts on game over
 extends Node2D
 
 const ZOMBIE_SCENE: PackedScene = preload("res://scenes/zombie.tscn")
@@ -23,17 +24,23 @@ var extra_spawn_time_left: float = 0.0
 var zombies_per_spawn: int = 1
 var zombies_killed: int = 0
 var player2_joined: bool = false
+# Zombies only spawn after the civilian screams or dies
+var zombies_coming: bool = false
 var is_game_over: bool = false
 
 @onready var hud: HUD = $HUD
 # Where player 2 appears and which way they face; move it in the editor to change that
 @onready var player2_spawn: Marker2D = $Player2Spawn
+@onready var civilian: Civilian = $Civilian
 
 
 # Called once: when the node enters the scene for the first time
 func _ready() -> void:
 	extra_spawn_time_left = extra_spawn_interval
 	hud.set_kills(zombies_killed)
+	# Two different events, one reaction: both start the zombies
+	civilian.alarmed.connect(_start_zombies)
+	civilian.died.connect(_start_zombies)
 
 
 # Called every frame
@@ -51,6 +58,9 @@ func _process(delta: float) -> void:
 				_spawn_player2()
 				break
 
+	if not zombies_coming:
+		return
+
 	extra_spawn_time_left -= delta
 	if extra_spawn_time_left <= 0:
 		zombies_per_spawn += 1
@@ -61,6 +71,10 @@ func _process(delta: float) -> void:
 		for i in zombies_per_spawn: # Repeats zombies_per_spawn times
 			_spawn_zombie()
 		spawn_time_left = spawn_interval
+
+
+func _start_zombies() -> void:
+	zombies_coming = true
 
 
 func _game_over() -> void:
