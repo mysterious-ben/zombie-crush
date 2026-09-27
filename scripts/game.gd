@@ -1,10 +1,10 @@
 # The root of the level: starts the zombies when the civilian is alarmed or shot,
-# spawns zombies and player 2, counts kills, ends well at kills_to_win, restarts on game over
+# spawns zombies, counts kills, ends well at kills_to_win, restarts on game over
 class_name Game extends Node2D
 
+# Reference to the zombie scene
+# Needed because zombies are created dynamically
 const ZOMBIE_SCENE: PackedScene = preload("res://scenes/zombie.tscn")
-const PLAYER_SCENE: PackedScene = preload("res://scenes/player.tscn")
-const PLAYER2_ACTIONS: Array[String] = ["p2_up", "p2_down", "p2_left", "p2_right", "p2_shoot"]
 
 # Zombies spawn every spawn_interval seconds
 @export var spawn_interval: float = 3.0
@@ -16,15 +16,14 @@ const PLAYER2_ACTIONS: Array[String] = ["p2_up", "p2_down", "p2_left", "p2_right
 @export var kills_to_win: int = 100
 # Seconds between all players dying and the restart
 @export var restart_delay: float = 5.0
-# Color that replaces white on the second player's sprite
-@export var player2_color: Color = Color(0.2, 0.4, 1.0)
 
 # Countdowns: subtract delta every frame, act when they reach zero
 var spawn_time_left: float = 0.0
 var extra_spawn_time_left: float = 0.0
 
 # Other
-var player2_joined: bool = false
+# Becomes true once any player has joined; before that nobody can lose
+var someone_joined: bool = false
 var zombies_per_spawn: int = 1
 var zombies_killed: int = 0
 # Zombies only spawn after the civilian screams or dies
@@ -36,7 +35,6 @@ var is_won: bool = false
 
 # These variables access other game components in a convenient way
 @onready var hud: HUD = $HUD
-@onready var player2_spawn: Marker2D = $Player2Spawn
 @onready var civilian: Civilian = $Civilian
 
 
@@ -55,17 +53,13 @@ func _process(delta: float) -> void:
 	if is_game_over or is_won:
 		return
 
-	# No players alive -> game over
-	if get_tree().get_nodes_in_group("players").is_empty():
+	# No players alive -> game over (but only after someone has joined)
+	var players: Array[Node] = get_tree().get_nodes_in_group("players")
+	if not players.is_empty():
+		someone_joined = true
+	elif someone_joined:
 		_game_over()
 		return
-
-	# The second player joins if any control is pressed
-	if not player2_joined:
-		for action in PLAYER2_ACTIONS:
-			if Input.is_action_just_pressed(action):
-				_spawn_player2()
-				break
 
 	# Zombie spawn logic
 	if zombies_coming:
@@ -78,18 +72,6 @@ func _process(delta: float) -> void:
 			for i in zombies_per_spawn: # Repeats zombies_per_spawn times
 				_spawn_zombie()
 			spawn_time_left = spawn_interval
-
-
-func _spawn_player2() -> void:
-	player2_joined = true
-	var player2: Player = PLAYER_SCENE.instantiate()
-	player2.action_prefix = "p2_"
-	player2.white_replacement = player2_color
-	player2.global_position = player2_spawn.global_position
-	player2.global_rotation = player2_spawn.global_rotation
-	# A new node does nothing until it is added to the scene tree
-	# This is how you can create objects
-	add_child(player2)
 
 
 # Zombies start coming after civilian screams

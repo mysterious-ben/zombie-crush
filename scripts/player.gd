@@ -1,9 +1,13 @@
 # class_name registers "Player" as a type, so other scripts can write "body is Player"
 class_name Player extends Character
 
-# A scene is a reusable blueprint; preload loads it once, when this script loads
+# Reference to the bullet scene
+# Needed because bullets are created dynamically
 const BULLET_SCENE: PackedScene = preload("res://scenes/bullet.tscn")
+# Used to recolor the second player
 const RECOLOR_SHADER: Shader = preload("res://shaders/recolor_white.gdshader")
+
+const ACTIONS: Array[String] = ["up", "down", "left", "right", "shoot"]
 
 # @export makes a variable editable in the Inspector (speeds are in pixels per second)
 @export var move_speed: float = 70.0
@@ -24,12 +28,16 @@ const RECOLOR_SHADER: Shader = preload("res://shaders/recolor_white.gdshader")
 
 # Countdown until the player can fire again
 var _shoot_cooldown_left: float = 0.0
+# Until one of our controls is pressed we are invisible and out of the game
+var has_joined: bool = false
+
+# @onready fills the variable once child nodes exist, just before _ready
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D
 
 # Called once: when the node enters the scene for the first time
 func _ready() -> void:
-	# Groups are tags: zombies chase "humans"; the game checks "players" for game over
-	add_to_group("humans")
-	add_to_group("players")
+	hide()
+	collision_shape.disabled = true
 
 	if white_replacement != Color.WHITE:
 		var recolor: ShaderMaterial = ShaderMaterial.new()
@@ -44,6 +52,13 @@ func _ready() -> void:
 # delta is the time since the last call, in seconds
 func _physics_process(delta: float) -> void:
 	if is_dead:
+		return
+	# Wait for any of our controls; that press only joins, it doesn't move or shoot
+	if not has_joined:
+		for action in ACTIONS:
+			if Input.is_action_just_pressed(action_prefix + action):
+				_join()
+				break
 		return
 
 	# get_axis returns -1, 0 or 1 (or in between for a gamepad stick)
@@ -61,6 +76,16 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed(action_prefix + "shoot") and _shoot_cooldown_left <= 0:
 		_shoot()
 		_shoot_cooldown_left = shoot_delay
+
+
+func _join() -> void:
+	has_joined = true
+	show()
+	collision_shape.disabled = false
+	# Groups are tags: zombies chase "humans"; the game checks "players" for game over.
+	# We join them only now, so a player who hasn't joined is ignored by both
+	add_to_group("humans")
+	add_to_group("players")
 
 
 func _shoot() -> void:
