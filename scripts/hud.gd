@@ -7,6 +7,7 @@ class_name HUD extends CanvasLayer
 # @onready fills the variable once child nodes exist, just before _ready
 @onready var kill_label: Label = $KillCount
 @onready var game_over_overlay: ColorRect = $GameOverOverlay
+@onready var victory_overlay: ColorRect = $VictoryOverlay
 
 
 func set_kills(count: int) -> void:
@@ -15,3 +16,8 @@ func set_kills(count: int) -> void:
 
 func show_game_over() -> void:
 	game_over_overlay.visible = true
+
+
+func show_victory() -> void:
+	kill_label.text = kill_label.text + " ZOMBIES PURGED"
+	victory_overlay.visible = true

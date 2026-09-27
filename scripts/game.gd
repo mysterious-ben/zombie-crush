@@ -1,5 +1,5 @@
 # The root of the level: starts the zombies when the civilian is alarmed or shot,
-# spawns zombies and player 2, counts kills, restarts on game over
+# spawns zombies and player 2, counts kills, ends well at kills_to_win, restarts on game over
 extends Node2D
 
 const ZOMBIE_SCENE: PackedScene = preload("res://scenes/zombie.tscn")
@@ -11,6 +11,9 @@ const PLAYER2_ACTIONS: Array[String] = ["p2_up", "p2_down", "p2_left", "p2_right
 @export var extra_spawn_interval: float = 10.0
 # How far outside the visible area zombies appear (zombie sprite is 16x16)
 @export var spawn_margin: float = 8.0
+
+# Kill this many zombies for the good ending: spawning stops and every zombie dies
+@export var kills_to_win: int = 100
 
 # Seconds between all players dying and the restart
 @export var restart_delay: float = 5.0
@@ -27,6 +30,7 @@ var player2_joined: bool = false
 # Zombies only spawn after the civilian screams or dies
 var zombies_coming: bool = false
 var is_game_over: bool = false
+var is_won: bool = false
 
 @onready var hud: HUD = $HUD
 # Where player 2 appears and which way they face; move it in the editor to change that
@@ -39,7 +43,7 @@ func _ready() -> void:
 	extra_spawn_time_left = extra_spawn_interval
 	hud.set_kills(zombies_killed)
 	# Two different events, one reaction: both start the zombies
-	civilian.alarmed.connect(_start_zombies)
+	civilian.zombies_are_alarmed.connect(_start_zombies)
 	civilian.died.connect(_start_zombies)
 
 
@@ -58,7 +62,8 @@ func _process(delta: float) -> void:
 				_spawn_player2()
 				break
 
-	if not zombies_coming:
+	# After the good ending no more zombies spawn, even if the civilian screams again
+	if not zombies_coming or is_won:
 		return
 
 	extra_spawn_time_left -= delta
@@ -73,18 +78,6 @@ func _process(delta: float) -> void:
 		spawn_time_left = spawn_interval
 
 
-func _start_zombies() -> void:
-	zombies_coming = true
-
-
-func _game_over() -> void:
-	is_game_over = true
-	hud.show_game_over()
-	# A one-shot timer; await waits for it without freezing the game
-	await get_tree().create_timer(restart_delay).timeout
-	get_tree().reload_current_scene()
-
-
 func _spawn_player2() -> void:
 	player2_joined = true
 	var player2: Player = PLAYER_SCENE.instantiate()
@@ -94,6 +87,10 @@ func _spawn_player2() -> void:
 	player2.global_rotation = player2_spawn.global_rotation
 	# A new node does nothing until it is added to the scene tree
 	add_child(player2)
+
+
+func _start_zombies() -> void:
+	zombies_coming = true
 
 
 func _spawn_zombie() -> void:
@@ -106,11 +103,6 @@ func _spawn_zombie() -> void:
 	# Run _on_zombie_died whenever this zombie emits "died"
 	zombie.died.connect(_on_zombie_died)
 	add_child(zombie)
-
-
-func _on_zombie_died() -> void:
-	zombies_killed += 1
-	hud.set_kills(zombies_killed)
 
 
 # Uniformly random point on the perimeter of rect
@@ -127,3 +119,26 @@ func _random_point_on_edge(rect: Rect2) -> Vector2:
 		return Vector2(rect.end.x - t, rect.end.y)
 	t -= rect.size.x
 	return Vector2(rect.position.x, rect.end.y - t)
+
+
+func _on_zombie_died() -> void:
+	zombies_killed += 1
+	hud.set_kills(zombies_killed)
+	if zombies_killed >= kills_to_win and not is_won:
+		_win()
+	
+	
+func _game_over() -> void:
+	is_game_over = true
+	hud.show_game_over()
+	# A one-shot timer; await waits for it without freezing the game
+	await get_tree().create_timer(restart_delay).timeout
+	get_tree().reload_current_scene()
+	
+	
+func _win() -> void:
+	# Set the flag first: the zombies we kill below emit "died" and land back in _on_zombie_died
+	is_won = true
+	for zombie: Zombie in get_tree().get_nodes_in_group("zombies"):
+		zombie.die()
+	hud.show_victory()

@@ -21,7 +21,10 @@ const RECOLOR_SHADER: Shader = preload("res://shaders/recolor_white.gdshader")
 
 @export var from_screen_radius: float = -5.0
 
-var shoot_cooldown_left: float = 0.0
+var _shoot_cooldown_left: float = 0.0
+
+# This makes using AnimatedSprite2D more convenient
+@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 
 # Called once: when the node enters the scene for the first time
@@ -35,7 +38,7 @@ func _ready() -> void:
 		recolor.shader = RECOLOR_SHADER
 		recolor.set_shader_parameter("white_replacement", white_replacement)
 		# $Name gets a child node by name
-		$AnimatedSprite2D.material = recolor
+		_sprite.material = recolor
 
 
 # Movement, collisions and input that drives them belong in _physics_process:
@@ -44,9 +47,6 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
-
-	#var direction: Vector2 = Input.get_vector("left", "right", "up", "down")
-	#velocity = direction * move_speed
 
 	# get_axis returns -1, 0 or 1 (or in between for a gamepad stick)
 	var rotation_direction: float = Input.get_axis(action_prefix + "left", action_prefix + "right")
@@ -59,16 +59,10 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	_stay_on_screen()
 
-	# move_and_slide records everything we bumped into this step
-	for i in get_slide_collision_count():
-		var collider: Node = get_slide_collision(i).get_collider()
-		if collider is Civilian:
-			collider.scream()
-
-	shoot_cooldown_left -= delta
-	if Input.is_action_just_pressed(action_prefix + "shoot") and shoot_cooldown_left <= 0:
+	_shoot_cooldown_left -= delta
+	if Input.is_action_just_pressed(action_prefix + "shoot") and _shoot_cooldown_left <= 0:
 		_shoot()
-		shoot_cooldown_left = shoot_delay
+		_shoot_cooldown_left = shoot_delay
 
 
 func _shoot() -> void:

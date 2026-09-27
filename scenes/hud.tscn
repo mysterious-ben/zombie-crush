@@ -23,6 +23,16 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0, 0, 0.35)
 
+[node name="VictoryOverlay" type="ColorRect" parent="." unique_id=1402375816]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 1, 0, 0.2)
+
 [node name="KillCount" type="Label" parent="." unique_id=1098392117]
 offset_left = 4.0
 offset_top = 2.0

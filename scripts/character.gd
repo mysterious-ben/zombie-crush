@@ -7,6 +7,7 @@ signal died
 
 var is_dead: bool = false
 
+@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 func die() -> void:
 	# A bullet and a zombie can hit on the same frame; die only once
@@ -17,7 +18,7 @@ func die() -> void:
 	died.emit()
 	# Keep colliding while the animation plays, then remove the body.
 	# await pauses this function until the signal fires; the game keeps running
-	$AnimatedSprite2D.play("death")
-	await $AnimatedSprite2D.animation_finished
+	_sprite.play("death")
+	await _sprite.animation_finished
 	# Deletes the node safely at the end of the current frame (this also removes it from its groups)
 	queue_free()

@@ -62,6 +62,9 @@ font_color = Color(1, 0, 0, 1)
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_touch"]
+radius = 11.0
+
 [node name="Civilian" type="CharacterBody2D" unique_id=325636589]
 script = ExtResource("1_jrwjn")
 
@@ -83,3 +86,8 @@ offset_bottom = 20.0
 label_settings = SubResource("LabelSettings_speech")
 horizontal_alignment = 1
 vertical_alignment = 2
+
+[node name="TalkZone" type="Area2D" parent="." unique_id=1739204512]
+
+[node name="TalkShape2D" type="CollisionShape2D" parent="TalkZone" unique_id=884120357]
+shape = SubResource("CircleShape2D_touch")

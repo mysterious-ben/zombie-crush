@@ -7,7 +7,8 @@ class_name Zombie extends Character
 
 # Called once: when the node enters the scene for the first time
 func _ready() -> void:
-	pass
+	# Lets the game find every living zombie at once (see the good ending in game.gd)
+	add_to_group("zombies")
 
 
 # Movement and collisions belong in _physics_process: it runs at a fixed rate
