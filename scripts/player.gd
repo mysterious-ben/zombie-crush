@@ -10,6 +10,7 @@ const RECOLOR_SHADER: Shader = preload("res://shaders/recolor_white.gdshader")
 @export var back_speed: float = 30.0
 @export var rotation_speed: float = 3.0 # Radians per second
 
+# Fire a bullet logic
 @export var bullet_spawn_distance: float = 8.0
 @export var shoot_delay: float = 1.0
 
@@ -18,9 +19,10 @@ const RECOLOR_SHADER: Shader = preload("res://shaders/recolor_white.gdshader")
 @export var action_prefix: String = ""
 # White pixels of the sprite are drawn in this color
 @export var white_replacement: Color = Color.WHITE
+# Players cannot leave the sceen area (margin)
+@export var screen_lock_margin: float = -5.0
 
-@export var from_screen_radius: float = -5.0
-
+# Countdown until the player can fire again
 var _shoot_cooldown_left: float = 0.0
 
 # Called once: when the node enters the scene for the first time
@@ -74,5 +76,5 @@ func _shoot() -> void:
 func _stay_on_screen() -> void:
 	# The screen rectangle converted to world coordinates (accounts for the camera)
 	var visible_rect: Rect2 = get_viewport().get_canvas_transform().affine_inverse() * get_viewport_rect()
-	var allowed: Rect2 = visible_rect.grow(from_screen_radius)
+	var allowed: Rect2 = visible_rect.grow(screen_lock_margin)
 	global_position = global_position.clamp(allowed.position, allowed.end)

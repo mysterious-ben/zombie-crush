@@ -1,39 +1,41 @@
 # The root of the level: starts the zombies when the civilian is alarmed or shot,
 # spawns zombies and player 2, counts kills, ends well at kills_to_win, restarts on game over
-extends Node2D
+class_name Game extends Node2D
 
 const ZOMBIE_SCENE: PackedScene = preload("res://scenes/zombie.tscn")
 const PLAYER_SCENE: PackedScene = preload("res://scenes/player.tscn")
 const PLAYER2_ACTIONS: Array[String] = ["p2_up", "p2_down", "p2_left", "p2_right", "p2_shoot"]
 
+# Zombies spawn every spawn_interval seconds
 @export var spawn_interval: float = 3.0
 # Every extra_spawn_interval seconds, each spawn brings one more zombie
 @export var extra_spawn_interval: float = 10.0
-# How far outside the visible area zombies appear (zombie sprite is 16x16)
+# How far outside the visible area zombies appear
 @export var spawn_margin: float = 8.0
-
-# Kill this many zombies for the good ending: spawning stops and every zombie dies
+# Kill this many zombies for the good ending
 @export var kills_to_win: int = 100
-
 # Seconds between all players dying and the restart
 @export var restart_delay: float = 5.0
-
 # Color that replaces white on the second player's sprite
 @export var player2_color: Color = Color(0.2, 0.4, 1.0)
 
 # Countdowns: subtract delta every frame, act when they reach zero
 var spawn_time_left: float = 0.0
 var extra_spawn_time_left: float = 0.0
+
+# Other
+var player2_joined: bool = false
 var zombies_per_spawn: int = 1
 var zombies_killed: int = 0
-var player2_joined: bool = false
 # Zombies only spawn after the civilian screams or dies
 var zombies_coming: bool = false
+# All players are dead
 var is_game_over: bool = false
+# All zombies are killed
 var is_won: bool = false
 
+# These variables access other game components in a convenient way
 @onready var hud: HUD = $HUD
-# Where player 2 appears and which way they face; move it in the editor to change that
 @onready var player2_spawn: Marker2D = $Player2Spawn
 @onready var civilian: Civilian = $Civilian
 
@@ -49,28 +51,27 @@ func _ready() -> void:
 
 # Called every frame
 func _process(delta: float) -> void:
-	if is_game_over:
+	# Endings
+	if is_game_over or is_won:
 		return
-	# Dead players leave the group once their death animation ends
+
+	# No players alive -> game over
 	if get_tree().get_nodes_in_group("players").is_empty():
 		_game_over()
 		return
 
+	# The second player joins if any control is pressed
 	if not player2_joined:
 		for action in PLAYER2_ACTIONS:
 			if Input.is_action_just_pressed(action):
 				_spawn_player2()
 				break
 
-	# After the good ending no more zombies spawn, even if the civilian screams again
-	if not zombies_coming or is_won:
-		return
-
+	# Zombie spawn logic
 	extra_spawn_time_left -= delta
 	if extra_spawn_time_left <= 0:
 		zombies_per_spawn += 1
 		extra_spawn_time_left = extra_spawn_interval
-
 	spawn_time_left -= delta
 	if spawn_time_left <= 0:
 		for i in zombies_per_spawn: # Repeats zombies_per_spawn times
@@ -86,13 +87,16 @@ func _spawn_player2() -> void:
 	player2.global_position = player2_spawn.global_position
 	player2.global_rotation = player2_spawn.global_rotation
 	# A new node does nothing until it is added to the scene tree
+	# This is how you can create objects
 	add_child(player2)
 
 
+# Zombies start coming after civilian screams
 func _start_zombies() -> void:
 	zombies_coming = true
 
 
+# Create zombies outside of the screen
 func _spawn_zombie() -> void:
 	# The screen rectangle converted to world coordinates (accounts for the camera)
 	var visible_rect: Rect2 = get_viewport().get_canvas_transform().affine_inverse() * get_viewport_rect()

@@ -56,8 +56,6 @@ radius = 6.0
 
 [node name="zombie" type="CharacterBody2D" unique_id=213358209]
 script = ExtResource("1_httt1")
-move_speed = null
-rotation_speed = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=551689138]
 sprite_frames = SubResource("SpriteFrames_ruvm8")

@@ -33,11 +33,14 @@ func _physics_process(delta: float) -> void:
 			collider.die()
 
 
+# Zombies alway go to the closest human
 func _find_closest_human() -> Character:
 	var closest: Character = null
 	var closest_distance: float = INF
+	# We cycle through all humans to find the closest one
 	for human: Character in get_tree().get_nodes_in_group("humans"):
 		# Squared distance is cheaper (no square root) and compares the same way
+		# We compare global positions, which ignore the parent's positions
 		var distance: float = global_position.distance_squared_to(human.global_position)
 		if distance < closest_distance:
 			closest_distance = distance
