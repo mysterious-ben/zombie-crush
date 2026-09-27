@@ -68,15 +68,16 @@ func _process(delta: float) -> void:
 				break
 
 	# Zombie spawn logic
-	extra_spawn_time_left -= delta
-	if extra_spawn_time_left <= 0:
-		zombies_per_spawn += 1
-		extra_spawn_time_left = extra_spawn_interval
-	spawn_time_left -= delta
-	if spawn_time_left <= 0:
-		for i in zombies_per_spawn: # Repeats zombies_per_spawn times
-			_spawn_zombie()
-		spawn_time_left = spawn_interval
+	if zombies_coming:
+		extra_spawn_time_left -= delta
+		if extra_spawn_time_left <= 0:
+			zombies_per_spawn += 1
+			extra_spawn_time_left = extra_spawn_interval
+		spawn_time_left -= delta
+		if spawn_time_left <= 0:
+			for i in zombies_per_spawn: # Repeats zombies_per_spawn times
+				_spawn_zombie()
+			spawn_time_left = spawn_interval
 
 
 func _spawn_player2() -> void:

@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://der4ca10bgpwg"]
+
+[ext_resource type="Script" uid="uid://1uj60piuesuq" path="res://scripts/ice_cube.gd" id="1_240pj"]
+[ext_resource type="Texture2D" uid="uid://cx0ki10e0nqwq" path="res://assets/handmade/ice_cube.png" id="1_mqgh4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ruvm8"]
+size = Vector2(16, 16)
+
+[node name="IceCube" type="RigidBody2D" unique_id=1186190657]
+script = ExtResource("1_240pj")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1775035384]
+texture = ExtResource("1_mqgh4")
+hframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1078347556]
+shape = SubResource("RectangleShape2D_ruvm8")
