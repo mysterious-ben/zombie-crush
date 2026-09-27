@@ -48,7 +48,7 @@ collision_enabled = false
 navigation_enabled = false
 
 [node name="TileMapWalls" type="TileMapLayer" parent="." unique_id=1215189975]
-tile_map_data = PackedByteArray("AAD5/wIAAAAAAAAAAAD6/wMAAAAAAAAAAAACAP3/AAAAAAAAAAD5/wMAAAAAAAAAAAADAAIAAAAAAAAAAAADAAMAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAD5/wIAAAAAAAAAAAD6/wMAAAAAAAAAAAACAP3/AAAAAAAAAAD5/wMAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAAFAAMAAAAAAAAAAAA=")
 tile_set = SubResource("TileSet_ruvm8")
 
 [node name="Player" parent="." unique_id=91578182 instance=ExtResource("1_uwrxv")]

@@ -23,10 +23,6 @@ const RECOLOR_SHADER: Shader = preload("res://shaders/recolor_white.gdshader")
 
 var _shoot_cooldown_left: float = 0.0
 
-# This makes using AnimatedSprite2D more convenient
-@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
-
-
 # Called once: when the node enters the scene for the first time
 func _ready() -> void:
 	# Groups are tags: zombies chase "humans"; the game checks "players" for game over
@@ -38,7 +34,7 @@ func _ready() -> void:
 		recolor.shader = RECOLOR_SHADER
 		recolor.set_shader_parameter("white_replacement", white_replacement)
 		# $Name gets a child node by name
-		_sprite.material = recolor
+		sprite.material = recolor
 
 
 # Movement, collisions and input that drives them belong in _physics_process:
