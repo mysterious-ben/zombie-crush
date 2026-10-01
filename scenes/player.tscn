@@ -1,7 +1,20 @@
 [gd_scene format=3 uid="uid://cy71d0tqwfdhj"]
 
 [ext_resource type="Script" uid="uid://d043yhlpj6v8n" path="res://scripts/player.gd" id="1_g2els"]
-[ext_resource type="Texture2D" uid="uid://by4cqbh1oxasm" path="res://assets/handmade/player.png" id="2_g2els"]
+[ext_resource type="Texture2D" uid="uid://by4cqbh1oxasm" path="res://assets/sprites/player.png" id="2_g2els"]
+[ext_resource type="Texture2D" uid="uid://c7l7wxga61vi8" path="res://assets/sprites/flashlight2.png" id="3_qhqgy"]
+[ext_resource type="AudioStream" uid="uid://btwrgdxq6pr2g" path="res://assets/audio/sfx/gun_sound.wav" id="4_dqkch"]
+
+[sub_resource type="Gradient" id="Gradient_e1654"]
+offsets = PackedFloat32Array(0, 0.21987952, 0.38253012)
+colors = PackedColorArray(1, 1, 1, 1, 0.23, 0.23, 0.23, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_g2els"]
+gradient = SubResource("Gradient_e1654")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.4978261, 0.5)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_death1"]
 atlas = ExtResource("2_g2els")
@@ -57,6 +70,41 @@ radius = 5.0
 [node name="Player" type="CharacterBody2D" unique_id=91578182]
 script = ExtResource("1_g2els")
 
+[node name="MapPreview" type="Node2D" parent="." unique_id=1245997259]
+visible = false
+position = Vector2(-198, -126)
+
+[node name="FloorPreview" type="ColorRect" parent="MapPreview" unique_id=599400947]
+offset_right = 375.0
+offset_bottom = 252.0
+color = Color(0.4, 0.4, 0.4, 1)
+
+[node name="CanvasModulate" type="CanvasModulate" parent="MapPreview" unique_id=1900858685]
+color = Color(0.08, 0.08, 0.08, 1)
+
+[node name="PlayerLight" type="Node2D" parent="." unique_id=1623545026]
+
+[node name="PointLight2D" type="PointLight2D" parent="PlayerLight" unique_id=2094797286]
+energy = 0.5
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_g2els")
+
+[node name="Flashlight1" type="PointLight2D" parent="PlayerLight" unique_id=1256101225]
+energy = 0.5
+shadow_enabled = true
+texture = ExtResource("3_qhqgy")
+offset = Vector2(73, 0)
+texture_scale = 0.4
+
+[node name="Flashlight2" type="PointLight2D" parent="PlayerLight" unique_id=1097272524]
+energy = 0.5
+range_item_cull_mask = 3
+shadow_enabled = true
+shadow_item_cull_mask = 3
+texture = ExtResource("3_qhqgy")
+offset = Vector2(73, 0)
+texture_scale = 0.4
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1020284367]
 position = Vector2(2, 0)
 sprite_frames = SubResource("SpriteFrames_mc2v0")
@@ -64,3 +112,8 @@ autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1393034662]
 shape = SubResource("CircleShape2D_g2els")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1577972269]
+stream = ExtResource("4_dqkch")
+max_distance = 500.0
+bus = &"SFX"

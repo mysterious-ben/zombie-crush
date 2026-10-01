@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://7gqp7g4qcjyk"]
+
+[ext_resource type="Script" uid="uid://cxua8pfi1ggtp" path="res://scripts/radio.gd" id="1_7h80l"]
+[ext_resource type="Texture2D" uid="uid://d3rnficu7rpto" path="res://assets/sprites/radio.png" id="1_y83x7"]
+[ext_resource type="AudioStream" uid="uid://cksgqplc1hfmw" path="res://assets/audio/music/horror_music_noise.ogg" id="3_7h80l"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ldjbc"]
+atlas = ExtResource("1_y83x7")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7h80l"]
+atlas = ExtResource("1_y83x7")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ruvm8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ldjbc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7h80l")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 1.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ruvm8"]
+size = Vector2(8, 3)
+
+[node name="Radio" type="AnimatableBody2D" unique_id=1184036322]
+script = ExtResource("1_7h80l")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=291577916]
+sprite_frames = SubResource("SpriteFrames_ruvm8")
+frame_progress = 0.81234866
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1296702335]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_ruvm8")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1536000355]
+stream = ExtResource("3_7h80l")
+max_distance = 500.0
+bus = &"Music"
+parameters/looping = true

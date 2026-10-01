@@ -33,6 +33,7 @@ var has_joined: bool = false
 
 # @onready fills the variable once child nodes exist, just before _ready
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
+@onready var audio_stream_player_2d: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
 # Called once: when the node enters the scene for the first time
 func _ready() -> void:
@@ -95,6 +96,7 @@ func _shoot() -> void:
 	bullet.global_rotation = global_rotation
 	# Add to the level, not to the player: a child would move and turn with the player
 	get_tree().current_scene.add_child(bullet)
+	audio_stream_player_2d.play()
 
 
 # Clamp the position so the whole collision circle stays inside the visible area

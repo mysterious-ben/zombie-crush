@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dvn7g74gm5i6t"]
 
-[ext_resource type="Texture2D" uid="uid://qeq6uxabxfsq" path="res://assets/handmade/npc.png" id="1_5iqb5"]
+[ext_resource type="Texture2D" uid="uid://qeq6uxabxfsq" path="res://assets/sprites/npc.png" id="1_5iqb5"]
 [ext_resource type="Script" uid="uid://daalpphy31c54" path="res://scripts/civilian.gd" id="1_jrwjn"]
 [ext_resource type="FontFile" uid="uid://bpbfok5c40t85" path="res://assets/fonts/PressStart2P-Regular.ttf" id="3_font"]
 
@@ -71,7 +71,6 @@ script = ExtResource("1_jrwjn")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=553243577]
 position = Vector2(1, 0)
 sprite_frames = SubResource("SpriteFrames_ydvnw")
-animation = &"death"
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1486393236]

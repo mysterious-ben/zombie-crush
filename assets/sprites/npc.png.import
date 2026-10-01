@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cn5d3g7ptbp8e"
-path="res://.godot/imported/column.png-63226c2a142303120a2663ed7c2dc795.ctex"
+uid="uid://qeq6uxabxfsq"
+path="res://.godot/imported/npc.png-7eb6e49a52d92cb6be2a9bc0408eb62f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/handmade/column.png"
-dest_files=["res://.godot/imported/column.png-63226c2a142303120a2663ed7c2dc795.ctex"]
+source_file="res://assets/sprites/npc.png"
+dest_files=["res://.godot/imported/npc.png-7eb6e49a52d92cb6be2a9bc0408eb62f.ctex"]
 
 [params]
 

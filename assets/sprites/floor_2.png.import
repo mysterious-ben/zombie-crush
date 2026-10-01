@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cx0ki10e0nqwq"
-path="res://.godot/imported/ice_cube.png-2e771b53a7c975bd5f83f6d872c12d8a.ctex"
+uid="uid://bw5h5bft7u72l"
+path="res://.godot/imported/floor_2.png-072be4641b9f0c661119c0b3249e3cad.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/handmade/ice_cube.png"
-dest_files=["res://.godot/imported/ice_cube.png-2e771b53a7c975bd5f83f6d872c12d8a.ctex"]
+source_file="res://assets/sprites/floor_2.png"
+dest_files=["res://.godot/imported/floor_2.png-072be4641b9f0c661119c0b3249e3cad.ctex"]
 
 [params]
 

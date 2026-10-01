@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://bea33sp65rdf1"]
 
-[ext_resource type="Texture2D" uid="uid://bnmugowf1pvq7" path="res://assets/handmade/zombie.png" id="1_1vlb3"]
+[ext_resource type="Texture2D" uid="uid://bnmugowf1pvq7" path="res://assets/sprites/zombie.png" id="1_1vlb3"]
 [ext_resource type="Script" uid="uid://umbpxd3dygk4" path="res://scripts/zombie.gd" id="1_httt1"]
+[ext_resource type="AudioStream" uid="uid://tpwnem84gxdc" path="res://assets/audio/sfx/zombie_sound.ogg" id="2_xepks"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_death1"]
 atlas = ExtResource("1_1vlb3")
@@ -59,8 +60,14 @@ script = ExtResource("1_httt1")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=551689138]
 sprite_frames = SubResource("SpriteFrames_ruvm8")
-animation = &"death"
 autoplay = "default"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=501070631]
 shape = SubResource("CircleShape2D_e1654")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=261382939]
+stream = ExtResource("2_xepks")
+autoplay = true
+max_distance = 500.0
+bus = &"SFX"
+parameters/looping = true

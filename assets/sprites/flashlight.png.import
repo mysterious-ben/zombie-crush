@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bnmugowf1pvq7"
-path="res://.godot/imported/zombie.png-458bf07e46b4831b8306fbaae225700a.ctex"
+uid="uid://civbmq8ly6jnw"
+path="res://.godot/imported/flashlight.png-fffef91c32bbf975c33fdbc3a165d0ac.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/handmade/zombie.png"
-dest_files=["res://.godot/imported/zombie.png-458bf07e46b4831b8306fbaae225700a.ctex"]
+source_file="res://assets/sprites/flashlight.png"
+dest_files=["res://.godot/imported/flashlight.png-fffef91c32bbf975c33fdbc3a165d0ac.ctex"]
 
 [params]
 
